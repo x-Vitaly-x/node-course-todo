@@ -14,6 +14,8 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
+const {authenticate} = require("./middleware/authenticate");
+
 app.post("/todos", (req, res) => {
     var todo = new Todo({
         text: req.body.text
@@ -105,6 +107,10 @@ app.post("/users", (req, res) => {
     }).catch((e) => {
         res.status(400).send(e);
     });
+});
+
+app.get("/users/me", authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 app.listen(port, () => {
